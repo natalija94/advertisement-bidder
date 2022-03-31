@@ -5,6 +5,7 @@ import ad.bidder.model.AdRequest;
 import ad.bidder.model.AdResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.math.RoundingMode;
  * @author natalija
  */
 @Service
+@Log4j2
 public class AuctionRequestProcessor {
 
     public AdResponse processJsonRequest(String jsonRequest) throws AdRequestFormatException {
@@ -45,12 +47,13 @@ public class AuctionRequestProcessor {
             throw new IllegalArgumentException("Method input must be specified.");
         }
 
+        double price = getPriceForAuction();
         AdResponse response = AdResponse.builder()
                 .id(adRequest.getId())
                 .bid(getPriceForAuction())
-                .content(String.format("The provided bid for auction id: %s.", adRequest.getId()))
+                .content(String.format("%s:%s", adRequest.getId(), price))
                 .build();
-
+        log.info("Formatted response: {}", response);
         return response;
     }
 }

@@ -18,9 +18,7 @@ import static ad.bidder.util.PathConstants.BID_CONTROLLER_PATH;
  */
 @RestController
 @Slf4j
-@RequestMapping(value = BID_CONTROLLER_PATH,
-        consumes = MediaType.APPLICATION_JSON_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = BID_CONTROLLER_PATH)
 public class BidderController {
 
     final AuctionRequestProcessor auctionRequestProcessor;
@@ -33,6 +31,7 @@ public class BidderController {
     @PostMapping(AD_REQUEST)
     public AdResponse auctionBid(@RequestBody String jsonRequest) {
         try {
+            log.info("jsonRequest => {}",jsonRequest);
             return auctionRequestProcessor.processJsonRequest(jsonRequest);
         } catch (AdRequestFormatException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request is not in expected JSON format. Please rely on documentation.", e);
