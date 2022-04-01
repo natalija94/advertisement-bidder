@@ -6,7 +6,7 @@ import ad.bidder.service.AuctionRequestProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -29,10 +29,10 @@ public class BidderController {
     }
 
     @PostMapping(AD_REQUEST)
-    public AdResponse auctionBid(@RequestBody String jsonRequest) {
+    @ResponseBody
+    public ResponseEntity<AdResponse> auctionBid(@RequestBody String jsonRequest) {
         try {
-            log.info("jsonRequest => {}",jsonRequest);
-            return auctionRequestProcessor.processJsonRequest(jsonRequest);
+            return new ResponseEntity(auctionRequestProcessor.processJsonRequest(jsonRequest), HttpStatus.OK);
         } catch (AdRequestFormatException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request is not in expected JSON format. Please rely on documentation.", e);
         }

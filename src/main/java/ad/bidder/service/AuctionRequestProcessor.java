@@ -47,11 +47,10 @@ public class AuctionRequestProcessor {
             throw new IllegalArgumentException("Method input must be specified.");
         }
 
-        double price = getPriceForAuction();
         AdResponse response = AdResponse.builder()
                 .id(adRequest.getId())
                 .bid(getPriceForAuction())
-                .content(String.format("%s:%s", adRequest.getId(), price))
+                .content(String.format("%s:$price$", adRequest.getId()))
                 .build();
         log.info("Formatted response: {}", response);
         return response;
